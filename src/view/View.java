@@ -107,12 +107,18 @@ public class View extends JFrame {
 		dataF.setText(now.format(dtf)); 
 	}
 	
+	public boolean isChitantaSelected() {
+		return chitantaB.isSelected();
+	}
 	
+	public Float getTvaValue() {
+		return Float.parseFloat(
+				tvaF.getText().replaceAll("COTA TVA", "").replaceAll("%", "").replaceAll(" ", ""));
+	}
 
 	public JLabel getDataL() {
 		return dataL;
 	}
-
 
 
 	public void setDataL(JLabel dataL) {
@@ -120,17 +126,14 @@ public class View extends JFrame {
 	}
 
 
-
 	public JTextField getDataF() {
 		return dataF;
 	}
 
 
-
 	public void setDataF(JTextField dataF) {
 		this.dataF = dataF;
 	}
-
 
 
 	public JTextField getCumparatorF() {

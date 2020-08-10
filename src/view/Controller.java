@@ -6,13 +6,8 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
@@ -29,9 +24,18 @@ import model.Cumparator;
 import model.Factura;
 import model.Furnizor;
 import model.Seria;
+import service.ChitantaManagementService;
+import service.FacturaManagementService;
+import service.impl.ChitantaManagementServiceImpl;
+import service.impl.FacturaManagementServiceImpl;
 
 public class Controller {
+	
 	private View view;
+	
+	private final ChitantaManagementService chitantaService = new ChitantaManagementServiceImpl();
+	
+	private final FacturaManagementService facturaService = new FacturaManagementServiceImpl();
 
 	public Controller(final View v) {
 		this.view = v;
@@ -93,70 +97,26 @@ public class Controller {
 		return prices;
 	}
 
-	private int getAndUpdateChitanta() {
-		int nr = 0;
-		try {
-			final FileReader fileReader = new FileReader("chitantanr.txt");
-			final BufferedReader bufferedReader = new BufferedReader(fileReader);
-			final String line = bufferedReader.readLine();
-			bufferedReader.close();
-			nr = Integer.parseInt(line);
-			final FileWriter fileWriter = new FileWriter("chitantanr.txt");
-			final BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-			bufferedWriter.write(new StringBuilder(String.valueOf(nr + 1)).toString());
-			bufferedWriter.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		}
-		return nr;
-	}
-
-	private int getAndUpdateFactura() {
-		int nr = 0;
-		try {
-			final FileReader fileReader = new FileReader("facturanr.txt");
-			final BufferedReader bufferedReader = new BufferedReader(fileReader);
-			final String line = bufferedReader.readLine();
-			bufferedReader.close();
-			nr = Integer.parseInt(line);
-			final FileWriter fileWriter = new FileWriter("facturanr.txt");
-			final BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-			bufferedWriter.write(new StringBuilder(String.valueOf(nr + 1)).toString());
-			bufferedWriter.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		}
-		return nr;
-	}
-
-	private float getTVA() {
-		return Float.parseFloat(
-				this.view.getTvaF().getText().replaceAll("COTA TVA", "").replaceAll("%", "").replaceAll(" ", ""));
-	}
-
 	class Exporter implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent arg0) {
 			try {
 				final Document document = new Document(PageSize.A4);
-				final int facturanr = Controller.this.getAndUpdateFactura();
+				final int facturanr = facturaService.getFacturaNr();
+				facturaService.updateFacturaNr();
 				PdfWriter.getInstance(document, new FileOutputStream("factura_nr_" + facturanr + ".pdf"));
 				document.open();
 				final Furnizor furnizor = new Furnizor();
 				final String furnizorData = furnizor.toString();
 				Font f = new Font(Font.FontFamily.TIMES_ROMAN, 8.0f, 0, BaseColor.BLACK);
 				document.add(new Paragraph(furnizorData, f));
-				final String cumpName = Controller.this.view.getCumparatorF().getText();
-				final String nrOrdReg = Controller.this.view.getNrOrdRegF().getText();
-				final String cui = Controller.this.view.getCuiF().getText();
-				final String sediu = Controller.this.view.getSediuF().getText();
-				final String judet = Controller.this.view.getJudetF().getText();
-				final String codIban = Controller.this.view.getIbanF().getText();
-				final String banca = Controller.this.view.getBancaF().getText();
+				final String cumpName = view.getCumparatorF().getText();
+				final String nrOrdReg = view.getNrOrdRegF().getText();
+				final String cui = view.getCuiF().getText();
+				final String sediu = view.getSediuF().getText();
+				final String judet = view.getJudetF().getText();
+				final String codIban = view.getIbanF().getText();
+				final String banca = view.getBancaF().getText();
 				final Cumparator cumparator = new Cumparator(cumpName, nrOrdReg, cui, sediu, judet, codIban, banca);
 				final String cumparatorData = cumparator.toString();
 				f = new Font(Font.FontFamily.TIMES_ROMAN, 8.0f, 0, BaseColor.BLACK);
@@ -164,8 +124,7 @@ public class Controller {
 				cumparatorP.setSpacingBefore(-150.0f);
 				document.add(cumparatorP);
 				f = new Font(Font.FontFamily.TIMES_ROMAN, 24.0f, 1, BaseColor.BLACK);
-				final Paragraph titleP = new Paragraph(
-						"                                                              FACTURA FISCALA");
+				final Paragraph titleP = new Paragraph("                                                              FACTURA FISCALA");
 				titleP.setSpacingBefore(-100.0f);
 				document.add(titleP);
 				final Seria seria = new Seria("UN  " + facturanr, view.getDataF().getText());
@@ -177,21 +136,22 @@ public class Controller {
 				seriaP.setSpacingBefore(30.0f);
 				document.add(seriaP);
 				document.add(seriaDataP);
-				final String[] services = Controller.this.getServicesFromTable();
-				final String[] ums = Controller.this.getUMFromTable();
-				final int[] quantities = Controller.this.getQuantityFromTable();
-				final float[] prices = Controller.this.getPricesFromTable();
-				final float tva = Controller.this.getTVA();
+				final String[] services = getServicesFromTable();
+				final String[] ums = getUMFromTable();
+				final int[] quantities = getQuantityFromTable();
+				final float[] prices = getPricesFromTable();
+				final float tva = view.getTvaValue();
 				final Paragraph p = new Paragraph("COTA T.V.A. :  " + tva + "%");
 				p.setSpacingBefore(110.0f);
 				document.add(p);
-				final Factura factura = new Factura(services, ums, quantities, prices, tva, Controller.this.getLength(),
-						Controller.this.view.getOnePercent().isSelected());
+				final Factura factura = new Factura(services, ums, quantities, prices, tva, getLength(),
+						view.getOnePercent().isSelected());
 				document.add(factura.getUpperTable());
 				document.add(factura.getLowerTable());
-				if (Controller.this.view.getChitantaB().isSelected()) {
+				if (view.isChitantaSelected()) {
 					f = new Font(Font.FontFamily.TIMES_ROMAN, 8.0f, 0, BaseColor.BLACK);
-					final int chitantanr = Controller.this.getAndUpdateChitanta();
+					final int chitantanr = chitantaService.getChitantaNr();
+					chitantaService.updateChitantaNr();
 					document.add(new Paragraph(
 							"______________________________________________________________________________"));
 					final Chitanta chitanta = new Chitanta(cumparator, quantities[0], prices[0], tva, chitantanr,
@@ -224,7 +184,7 @@ public class Controller {
 				}
 				document.close();
 			} catch (FileNotFoundException | DocumentException ex2) {
-				JOptionPane.showMessageDialog(Controller.this.view, "Close the open PDF before operating");
+				JOptionPane.showMessageDialog(view, "Close the open PDF before operating");
 			}
 		}
 	}
