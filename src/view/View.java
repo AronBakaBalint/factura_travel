@@ -40,75 +40,109 @@ public class View extends JFrame {
 	private JTextField tvaF = new JTextField("COTA TVA    5%");
 	private JLabel dataL = new JLabel("Data:");
 	private JTextField dataF = new JTextField(new Date().toString());
-	private JCheckBox chitantaB = new JCheckBox("Chitanta");;
-	private JCheckBox onePercent = new JCheckBox("1%");;
+	private JCheckBox chitantaB = new JCheckBox("Chitanta");
+	private JCheckBox onePercent = new JCheckBox("1%");
+	private JCheckBox masaServita = new JCheckBox("Masa servita");
 	private JButton export = new JButton("Generare");
 	private JTable table;
 
 	public View() {
-		this.setSize(700, 540);
-		this.setLayout(null);
+		setSize(700, 540);
+		setLayout(null);
 		final Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
-		this.setDefaultCloseOperation(3);
+		setLocation(dim.width / 2 - getSize().width / 2, dim.height / 2 - getSize().height / 2);
+		setDefaultCloseOperation(3);
 		final Border border = BorderFactory.createLineBorder(new Color(145, 145, 145));
-		this.sediuF.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(1, 1, 1, 1)));
-		this.cumparatorL.setBounds(40, 20, 80, 20);
-		this.cumparatorF.setBounds(140, 20, 180, 20);
-		this.add(this.cumparatorL);
-		this.add(this.cumparatorF);
-		this.nrOrdRegL.setBounds(40, 45, 80, 20);
-		this.nrOrdRegF.setBounds(140, 45, 180, 20);
-		this.add(this.nrOrdRegL);
-		this.add(this.nrOrdRegF);
-		this.cuiL.setBounds(40, 70, 80, 20);
-		this.cuiF.setBounds(140, 70, 180, 20);
-		this.add(this.cuiL);
-		this.add(this.cuiF);
-		this.sediuL.setBounds(40, 105, 80, 20);
-		this.sediuF.setBounds(140, 105, 180, 40);
-		this.add(this.sediuL);
-		this.add(this.sediuF);
-		this.judetL.setBounds(40, 160, 80, 20);
-		this.judetF.setBounds(140, 160, 180, 20);
-		this.add(this.judetL);
-		this.add(this.judetF);
-		this.ibanL.setBounds(40, 185, 80, 20);
-		this.ibanF.setBounds(140, 185, 180, 20);
-		this.add(this.ibanL);
-		this.add(this.ibanF);
-		this.bancaL.setBounds(40, 210, 80, 20);
-		this.bancaF.setBounds(140, 210, 180, 20);
-		this.add(this.bancaL);
-		this.add(this.bancaF);
-		this.tvaF.setBounds(40, 260, 100, 20);
-		this.add(this.tvaF);
-		this.dataL.setBounds(160, 260, 100, 20);
-		this.add(dataL);
-		this.dataF.setBounds(220, 260, 100, 20);
-		this.add(dataF);
-		this.onePercent.setBounds(140, 380, 120, 20);
-		this.add(this.onePercent);
-		this.chitantaB.setBounds(140, 420, 120, 20);
-		this.add(this.chitantaB);
-		this.export.setBounds(260, 420, 100, 20);
-		this.add(this.export);
-		final String[] header = { "Denumirea produselor sau a serviciilor", "U.M.", "Cantitate", "Pret Unitar (lei)" };
+		sediuF.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(1, 1, 1, 1)));
+		cumparatorL.setBounds(40, 20, 80, 20);
+		cumparatorF.setBounds(140, 20, 180, 20);
+		add(cumparatorL);
+		add(cumparatorF);
+		nrOrdRegL.setBounds(40, 45, 80, 20);
+		nrOrdRegF.setBounds(140, 45, 180, 20);
+		add(nrOrdRegL);
+		add(nrOrdRegF);
+		cuiL.setBounds(40, 70, 80, 20);
+		cuiF.setBounds(140, 70, 180, 20);
+		add(cuiL);
+		add(cuiF);
+		sediuL.setBounds(40, 105, 80, 20);
+		sediuF.setBounds(140, 105, 180, 40);
+		add(sediuL);
+		add(sediuF);
+		judetL.setBounds(40, 160, 80, 20);
+		judetF.setBounds(140, 160, 180, 20);
+		add(judetL);
+		add(judetF);
+		ibanL.setBounds(40, 185, 80, 20);
+		ibanF.setBounds(140, 185, 180, 20);
+		add(ibanL);
+		add(ibanF);
+		bancaL.setBounds(40, 210, 80, 20);
+		bancaF.setBounds(140, 210, 180, 20);
+		add(bancaL);
+		add(bancaF);
+		tvaF.setBounds(40, 260, 100, 20);
+		add(tvaF);
+		dataL.setBounds(160, 260, 100, 20);
+		add(dataL);
+		dataF.setBounds(220, 260, 100, 20);
+		add(dataF);
+		onePercent.setBounds(140, 380, 100, 20);
+		add(onePercent);
+		chitantaB.setBounds(240, 380, 100, 20);
+		add(chitantaB);
+		masaServita.setBounds(340, 380, 100, 20);
+		add(masaServita);
+		export.setBounds(260, 420, 100, 20);
+		add(export);
+		final String[] header = { "Denumirea produselor sau a serviciilor", "U.M.", "Cantitate", "Pret Total (lei)" };
 		final String[][] body = new String[1][4];
-		(this.table = new JTable(body, header)).setPreferredScrollableViewportSize(new Dimension(1100, 100));
-		final JScrollPane scrollPane = new JScrollPane(this.table);
+		(table = new JTable(body, header)).setPreferredScrollableViewportSize(new Dimension(1100, 100));
+		final JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(40, 300, 600, 40);
-		this.table.getColumnModel().getColumn(1).setMaxWidth(70);
-		this.table.getColumnModel().getColumn(2).setMaxWidth(70);
-		this.table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
-		this.add(scrollPane);
+		table.getColumnModel().getColumn(1).setMaxWidth(70);
+		table.getColumnModel().getColumn(2).setMaxWidth(70);
+		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+		add(scrollPane);
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");  
 		LocalDateTime now = LocalDateTime.now();  
 		dataF.setText(now.format(dtf)); 
 	}
 	
+	public Float getBaseTotal() {
+		return Float.parseFloat(table.getValueAt(0, 3).toString());
+	}
+	
+	public String getNumeServicii() {
+		return table.getValueAt(0, 0).toString();
+	}
+	
+	public String getUM() {
+		return table.getValueAt(0, 1).toString();
+	}
+	
+	public Integer getQuantity() {
+		return Integer.parseInt(table.getValueAt(0, 2).toString());
+	}
+	
+	public int getNrOfRows() {
+		int cnt = 1;
+		if(onePercent.isSelected()) {
+			cnt ++;
+		}
+		if(masaServita.isSelected()) {
+			cnt ++;
+		}
+		return cnt;
+	}
+	
 	public boolean isChitantaSelected() {
 		return chitantaB.isSelected();
+	}
+	
+	public boolean isOnePercentSelected() {
+		return onePercent.isSelected();
 	}
 	
 	public Float getTvaValue() {
@@ -137,7 +171,7 @@ public class View extends JFrame {
 
 
 	public JTextField getCumparatorF() {
-		return this.cumparatorF;
+		return cumparatorF;
 	}
 
 	public void setCumparatorF(final JTextField cumparatorF) {
@@ -145,7 +179,7 @@ public class View extends JFrame {
 	}
 
 	public JLabel getCumparatorL() {
-		return this.cumparatorL;
+		return cumparatorL;
 	}
 
 	public void setCumparatorL(final JLabel cumparatorL) {
@@ -153,7 +187,7 @@ public class View extends JFrame {
 	}
 
 	public JTextField getNrOrdRegF() {
-		return this.nrOrdRegF;
+		return nrOrdRegF;
 	}
 
 	public void setNrOrdRegF(final JTextField nrOrdRegF) {
@@ -161,7 +195,7 @@ public class View extends JFrame {
 	}
 
 	public JLabel getNrOrdRegL() {
-		return this.nrOrdRegL;
+		return nrOrdRegL;
 	}
 
 	public void setNrOrdRegL(final JLabel nrOrdRegL) {
@@ -169,7 +203,7 @@ public class View extends JFrame {
 	}
 
 	public JTextField getCuiF() {
-		return this.cuiF;
+		return cuiF;
 	}
 
 	public void setCuiF(final JTextField cuiF) {
@@ -177,7 +211,7 @@ public class View extends JFrame {
 	}
 
 	public JLabel getCuiL() {
-		return this.cuiL;
+		return cuiL;
 	}
 
 	public void setCuiL(final JLabel cuiL) {
@@ -185,7 +219,7 @@ public class View extends JFrame {
 	}
 
 	public JTextArea getSediuF() {
-		return this.sediuF;
+		return sediuF;
 	}
 
 	public void setSediuF(final JTextArea sediuF) {
@@ -193,7 +227,7 @@ public class View extends JFrame {
 	}
 
 	public JLabel getSediuL() {
-		return this.sediuL;
+		return sediuL;
 	}
 
 	public void setSediuL(final JLabel sediuL) {
@@ -201,7 +235,7 @@ public class View extends JFrame {
 	}
 
 	public JTextField getJudetF() {
-		return this.judetF;
+		return judetF;
 	}
 
 	public void setJudetF(final JTextField judetF) {
@@ -209,7 +243,7 @@ public class View extends JFrame {
 	}
 
 	public JLabel getJudetL() {
-		return this.judetL;
+		return judetL;
 	}
 
 	public void setJudetL(final JLabel judetL) {
@@ -217,7 +251,7 @@ public class View extends JFrame {
 	}
 
 	public JLabel getIbanL() {
-		return this.ibanL;
+		return ibanL;
 	}
 
 	public void setIbanL(final JLabel ibanL) {
@@ -225,7 +259,7 @@ public class View extends JFrame {
 	}
 
 	public JTextField getIbanF() {
-		return this.ibanF;
+		return ibanF;
 	}
 
 	public void setIbanF(final JTextField ibanF) {
@@ -233,7 +267,7 @@ public class View extends JFrame {
 	}
 
 	public JLabel getBancaL() {
-		return this.bancaL;
+		return bancaL;
 	}
 
 	public void setBancaL(final JLabel bancaL) {
@@ -241,7 +275,7 @@ public class View extends JFrame {
 	}
 
 	public JTextField getBancaF() {
-		return this.bancaF;
+		return bancaF;
 	}
 
 	public void setBancaF(final JTextField bancaF) {
@@ -249,7 +283,7 @@ public class View extends JFrame {
 	}
 
 	public JTextField getTvaF() {
-		return this.tvaF;
+		return tvaF;
 	}
 
 	public void setTvaF(final JTextField tvaF) {
@@ -257,7 +291,7 @@ public class View extends JFrame {
 	}
 
 	public JCheckBox getChitantaB() {
-		return this.chitantaB;
+		return chitantaB;
 	}
 
 	public void setChitantaB(final JCheckBox chitantaB) {
@@ -265,7 +299,7 @@ public class View extends JFrame {
 	}
 
 	public JButton getExport() {
-		return this.export;
+		return export;
 	}
 
 	public void setExport(final JButton export) {
@@ -273,7 +307,7 @@ public class View extends JFrame {
 	}
 
 	public JTable getTable() {
-		return this.table;
+		return table;
 	}
 
 	public void setTable(final JTable table) {
@@ -281,7 +315,7 @@ public class View extends JFrame {
 	}
 
 	public JCheckBox getOnePercent() {
-		return this.onePercent;
+		return onePercent;
 	}
 
 	public void setOnePercent(final JCheckBox onePercent) {

@@ -19,13 +19,10 @@ public class Chitanta
     private int chitantanr;
     private int facturanr;
     private Cumparator cumparator;
-    private int quantity;
-    private float price;
-    private float tva;
-    private boolean onePercent;
+    private float total;
     private String date;
     
-    public Chitanta(Cumparator cumparator, int quantity, float price, float tva, int chitantanr, int facturanr,  boolean onePercent, String date) {
+    public Chitanta(Cumparator cumparator, float total, int chitantanr, int facturanr, String date) {
         this.furnizor = "UNITARIUS TRAVEL SRL";
         this.nrOrdReg = "J12/1420/2011";
         this.cui = "RO28545849";
@@ -35,12 +32,9 @@ public class Chitanta
         this.punctDeLucru = "CLUJ-NAPOCA\nBLD. 21 DEC. 1989 NR 14";
         this.codIbanRon = "RO20OTPV200000407248RO01";
         this.cumparator = cumparator;
-        this.quantity = quantity;
-        this.price = price;
-        this.tva = tva;
         this.chitantanr = chitantanr;
         this.facturanr = facturanr;
-        this.onePercent = onePercent;
+        this.total = total;
         this.date = date;
     }
     
@@ -73,23 +67,13 @@ public class Chitanta
             txt = String.valueOf(txt) + "Adresa: " + this.cumparator.getSediu();
         }
         txt = String.valueOf(txt) + "            Judetul  " + this.cumparator.getJudet() + "\n";
-        float suma;
-        if (!this.onePercent) {
-            suma = this.quantity * this.price * (1.0f + this.tva / 100.0f);
+        if (total == Math.floor(total)) {
+            txt = String.valueOf(txt) + "Suma de:  " + total * 100.0f / 100.0f + "              adica:  " + Converter.number2String((int)Math.floor(total)) + "lei\n";
         }
         else {
-            suma = this.quantity * this.price * (1.0f + this.tva / 100.0f + 0.01f);
-        }
-        if (suma - Math.floor(suma) > 0.95) {
-            suma = (float)Math.round(suma);
-        }
-        if (suma == Math.floor(suma)) {
-            txt = String.valueOf(txt) + "Suma de:  " + suma * 100.0f / 100.0f + "              adica:  " + Converter.number2String((int)Math.floor(suma)) + "lei\n";
-        }
-        else {
-            txt = String.valueOf(txt) + "Suma de:  " + String.format("%.2f", suma) + "              adica:  " + Converter.number2String((int)Math.floor(suma));
+            txt = String.valueOf(txt) + "Suma de:  " + String.format("%.2f", total) + "              adica:  " + Converter.number2String((int)Math.floor(total));
             txt = String.valueOf(txt) + "leisi";
-            txt = String.valueOf(txt) + Converter.number2String(Math.round(suma * 100.0f % 100.0f)) + "bani\n";
+            txt = String.valueOf(txt) + Converter.number2String(Math.round(total * 100.0f % 100.0f)) + "bani\n";
         }
         txt = String.valueOf(txt) + "reprezentand:  CV FACT " + this.facturanr + "/" + date + "                                                                                             Casier,";
         return txt;

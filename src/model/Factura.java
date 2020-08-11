@@ -4,35 +4,28 @@
 
 package model;
 
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.Phrase;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+
+import calculator.PriceCalculator;
 
 public class Factura
 {
-    private String[] numeProdusSauServicii;
-    private String[] um;
-    private int[] cantitate;
-    private float[] pretUnitar;
-    private float tva;
-    private int length;
-    private boolean onePercent;
+    private String numeProdusSauServicii;
+    private String um;
+    private int cantitate;
+    private float pretTotal;
+    private PriceCalculator priceCalculator;
     
-    public Factura(final String[] numeProdusSauServicii, final String[] um, final int[] cantitate, final float[] pretUnitar, final float tva, final int len, final boolean onePercent) {
-        this.numeProdusSauServicii = new String[15];
+    public Factura(final String numeProdusSauServicii, final String um, final int cantitate, final float pretTotal, final int len, PriceCalculator priceCalculator) {
         this.numeProdusSauServicii = numeProdusSauServicii;
         this.um = um;
         this.cantitate = cantitate;
-        this.pretUnitar = pretUnitar;
-        this.tva = tva;
-        this.length = len;
-        this.onePercent = onePercent;
-    }
-    
-    public Factura() {
-        this.numeProdusSauServicii = new String[15];
+        this.pretTotal = pretTotal;
+        this.priceCalculator = priceCalculator;
     }
     
     public PdfPTable getUpperTable() {
@@ -62,38 +55,37 @@ public class Factura
         cell = new PdfPCell(new Phrase("Valoare\n T.V.A\n-lei-", f));
         cell.setHorizontalAlignment(1);
         table.addCell(cell);
-        if (!this.onePercent) {
+        
             f = new Font(Font.FontFamily.TIMES_ROMAN, 10.0f, 0, BaseColor.BLACK);
-            for (int i = 0; i < this.length; ++i) {
                 for (int j = 0; j < 7; ++j) {
                     switch (j) {
                         case 0: {
-                            cell = new PdfPCell(new Phrase(new StringBuilder(String.valueOf(i + 1)).toString(), f));
+                            cell = new PdfPCell(new Phrase(1+"", f));
                             cell.setRowspan(2);
                             break;
                         }
                         case 1: {
-                            cell = new PdfPCell(new Phrase(String.valueOf(this.numeProdusSauServicii[i]) + "\n\n\nTermen de plata:   5 zile", f));
+                            cell = new PdfPCell(new Phrase(this.numeProdusSauServicii + priceCalculator.getNumeProduse(), f));
                             break;
                         }
                         case 2: {
-                            cell = new PdfPCell(new Phrase(this.um[i], f));
+                            cell = new PdfPCell(new Phrase(this.um, f));
                             break;
                         }
                         case 3: {
-                            cell = new PdfPCell(new Phrase(new StringBuilder(String.valueOf(this.cantitate[i])).toString(), f));
+                            cell = new PdfPCell(new Phrase(priceCalculator.getQuantity(), f));
                             break;
                         }
                         case 4: {
-                            cell = new PdfPCell(new Phrase(new StringBuilder(String.valueOf(this.pretUnitar[i])).toString(), f));
+                            cell = new PdfPCell(new Phrase(priceCalculator.getUnitPrice(), f));
                             break;
                         }
                         case 5: {
-                            cell = new PdfPCell(new Phrase(new StringBuilder(String.valueOf(this.pretUnitar[i] * this.cantitate[i])).toString(), f));
+                            cell = new PdfPCell(new Phrase(priceCalculator.getPriceWithoutTVA(), f));
                             break;
                         }
                         case 6: {
-                            cell = new PdfPCell(new Phrase(String.format("%.2f", this.pretUnitar[i] * this.cantitate[i] * this.tva / 100.0f), f));
+                            cell = new PdfPCell(new Phrase(priceCalculator.getTVA(), f));
                             break;
                         }
                     }
@@ -101,49 +93,9 @@ public class Factura
                     cell.setHorizontalAlignment(1);
                     table.addCell(cell);
                 }
-            }
-        }
-        else {
-            f = new Font(Font.FontFamily.TIMES_ROMAN, 10.0f, 0, BaseColor.BLACK);
-            for (int i = 0; i < this.length; ++i) {
-                for (int j = 0; j < 7; ++j) {
-                    switch (j) {
-                        case 0: {
-                            cell = new PdfPCell(new Phrase(new StringBuilder(String.valueOf(i + 1)).toString(), f));
-                            cell.setRowspan(2);
-                            break;
-                        }
-                        case 1: {
-                            cell = new PdfPCell(new Phrase(String.valueOf(this.numeProdusSauServicii[i]) + "\n\nTaxa turism 1%\n" + "\n\nTermen de plata:   5 zile", f));
-                            break;
-                        }
-                        case 2: {
-                            cell = new PdfPCell(new Phrase(this.um[i], f));
-                            break;
-                        }
-                        case 3: {
-                            cell = new PdfPCell(new Phrase(String.valueOf(this.cantitate[i]) + "\n\n1", f));
-                            break;
-                        }
-                        case 4: {
-                            cell = new PdfPCell(new Phrase(String.valueOf(this.pretUnitar[i]) + "\n\n" + this.pretUnitar[i] * this.cantitate[i] / 100.0f, f));
-                            break;
-                        }
-                        case 5: {
-                            cell = new PdfPCell(new Phrase(String.valueOf(this.pretUnitar[i] * this.cantitate[i]) + "\n\n" + this.pretUnitar[i] * this.cantitate[i] / 100.0f, f));
-                            break;
-                        }
-                        case 6: {
-                            cell = new PdfPCell(new Phrase(String.valueOf(String.format("%.2f", this.pretUnitar[i] * this.cantitate[i] * this.tva / 100.0f)) + "\n\n-", f));
-                            break;
-                        }
-                    }
-                    cell.setFixedHeight(70.0f);
-                    cell.setHorizontalAlignment(1);
-                    table.addCell(cell);
-                }
-            }
-        }
+            
+        
+        
         cell = new PdfPCell(new Phrase("Factura valabila fara semnatura si stampila cf. art. V, alin (2) din Ordonanta nr 17/2015 si art. 319 alin (29) din Legea nr. 227/2015 privind Codul fiscal", f));
         cell.setColspan(6);
         table.addCell(cell);
@@ -177,17 +129,12 @@ public class Factura
         cell.setHorizontalAlignment(1);
         cell.setVerticalAlignment(5);
         table.addCell(cell);
-        if (!this.onePercent) {
-            cell = new PdfPCell(new Phrase(new StringBuilder(String.valueOf(this.pretUnitar[0] * this.cantitate[0])).toString(), f));
-        }
-        else {
-            cell = new PdfPCell(new Phrase(new StringBuilder(String.valueOf(this.pretUnitar[0] * this.cantitate[0] + this.pretUnitar[0] * this.cantitate[0] / 100.0f)).toString(), f));
-        }
+        cell = new PdfPCell(new Phrase(priceCalculator.getTotalWithoutTVA()+"", f));
         cell.setFixedHeight(40.0f);
         cell.setHorizontalAlignment(1);
         cell.setVerticalAlignment(5);
         table.addCell(cell);
-        cell = new PdfPCell(new Phrase(String.format("%.2f", this.pretUnitar[0] * this.cantitate[0] * this.tva / 100.0f), f));
+        cell = new PdfPCell(new Phrase(priceCalculator.getTVA().replace("-", "").trim(), f));
         cell.setHorizontalAlignment(1);
         cell.setVerticalAlignment(5);
         cell.setFixedHeight(40.0f);
@@ -196,12 +143,7 @@ public class Factura
         cell.setHorizontalAlignment(1);
         table.addCell(cell);
         f = new Font(Font.FontFamily.TIMES_ROMAN, 12.0f, 1, BaseColor.BLACK);
-        if (!this.onePercent) {
-            cell = new PdfPCell(new Phrase(String.format("%.2f", this.pretUnitar[0] * this.cantitate[0] * (1.0f + this.tva / 100.0f)), f));
-        }
-        else {
-            cell = new PdfPCell(new Phrase(String.format("%.2f", this.pretUnitar[0] * this.cantitate[0] * (1.0f + this.tva / 100.0f) + this.pretUnitar[0] * this.cantitate[0] / 100.0f), f));
-        }
+        cell = new PdfPCell(new Phrase(pretTotal+"", f));
         cell.setHorizontalAlignment(1);
         cell.setVerticalAlignment(5);
         cell.setColspan(2);
