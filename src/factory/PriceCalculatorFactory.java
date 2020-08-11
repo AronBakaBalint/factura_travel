@@ -14,4 +14,5 @@ public class PriceCalculatorFactory {
 			return new BasePriceCalculator(view.getBaseTotal(), view.getTvaValue(), view.getQuantity());
 		}
 	}
+	
 }

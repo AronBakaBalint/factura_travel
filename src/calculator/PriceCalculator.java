@@ -18,5 +18,9 @@ public abstract class PriceCalculator {
 	public abstract String getNumeProduse();
 	public abstract String getTotalWithoutTVA();
 	public abstract String getQuantity();
+	
+	public Float getTotalPrice() {
+		return pretTotal;
+	}
 
 }

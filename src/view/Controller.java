@@ -19,6 +19,7 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import calculator.BasePriceCalculator;
 import factory.PriceCalculatorFactory;
 import model.Chitanta;
 import model.Cumparator;
@@ -85,13 +86,14 @@ public class Controller {
 				document.add(seriaP);
 				document.add(seriaDataP);
 				final String services = view.getNumeServicii();
-				final String ums = view.getUM();
-				final int quantities = view.getQuantity();
+				final String um = view.getUM();
+				final String masaName = view.getNumeMasa();
+				final String masaUm = view.getMasaUM();
 				final float tva = view.getTvaValue();
 				final Paragraph p = new Paragraph("COTA T.V.A. :  " + tva + "%");
 				p.setSpacingBefore(110.0f);
 				document.add(p);
-				final Factura factura = new Factura(services, ums, quantities, view.getBaseTotal(), view.getNrOfRows(), priceCalculatorFactory.getPriceCalculator(view));
+				final Factura factura = new Factura(services, masaName, um, masaUm, priceCalculatorFactory.getPriceCalculator(view), new BasePriceCalculator(view.getMasaServitaTotal(), 5f, view.getMasaQuantity()));
 				document.add(factura.getUpperTable());
 				document.add(factura.getLowerTable());
 				if (view.isChitantaSelected()) {
@@ -100,7 +102,7 @@ public class Controller {
 					chitantaService.updateChitantaNr();
 					document.add(new Paragraph(
 							"______________________________________________________________________________"));
-					final Chitanta chitanta = new Chitanta(cumparator, view.getBaseTotal(), chitantanr,
+					final Chitanta chitanta = new Chitanta(cumparator, view.getBaseTotal()+view.getMasaServitaTotal(), chitantanr,
 							facturanr, view.getDataF().getText());
 					final Paragraph p2 = new Paragraph(chitanta.getVanzator(), f);
 					p2.setSpacingAfter(20.0f);
@@ -134,4 +136,5 @@ public class Controller {
 			}
 		}
 	}
+
 }

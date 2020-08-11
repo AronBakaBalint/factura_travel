@@ -97,10 +97,10 @@ public class View extends JFrame {
 		export.setBounds(260, 420, 100, 20);
 		add(export);
 		final String[] header = { "Denumirea produselor sau a serviciilor", "U.M.", "Cantitate", "Pret Total (lei)" };
-		final String[][] body = new String[1][4];
+		final String[][] body = new String[2][4];
 		(table = new JTable(body, header)).setPreferredScrollableViewportSize(new Dimension(1100, 100));
 		final JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(40, 300, 600, 40);
+		scrollPane.setBounds(40, 300, 600, 55);
 		table.getColumnModel().getColumn(1).setMaxWidth(70);
 		table.getColumnModel().getColumn(2).setMaxWidth(70);
 		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
@@ -126,15 +126,40 @@ public class View extends JFrame {
 		return Integer.parseInt(table.getValueAt(0, 2).toString());
 	}
 	
-	public int getNrOfRows() {
-		int cnt = 1;
-		if(onePercent.isSelected()) {
-			cnt ++;
+	public String getNumeMasa() {
+		try{
+			return table.getValueAt(1, 0).toString();
+		} catch(Exception e) {
+			return "";
 		}
-		if(masaServita.isSelected()) {
-			cnt ++;
+	}
+	
+	public Float getMasaServitaTotal() {
+		try{
+			return Float.parseFloat(table.getValueAt(1, 3).toString());
+		} catch(Exception e) {
+			return 0.0f;
 		}
-		return cnt;
+	}
+	
+	public String getMasaUM() {
+		try {
+			return table.getValueAt(1, 1).toString();
+		} catch(Exception e) {
+			return "";
+		}
+	}
+	
+	public Integer getMasaQuantity() {
+		try{
+			return Integer.parseInt(table.getValueAt(1, 2).toString());
+		} catch(Exception e) {
+			return 0;
+		}
+	}
+	
+	public boolean isMasaServitaSelected() {
+		return masaServita.isSelected();
 	}
 	
 	public boolean isChitantaSelected() {
@@ -321,4 +346,13 @@ public class View extends JFrame {
 	public void setOnePercent(final JCheckBox onePercent) {
 		this.onePercent = onePercent;
 	}
+	
+	public JCheckBox getMasaServita() {
+		return masaServita;
+	}
+
+	public void setMasaServita(JCheckBox masaServita) {
+		this.masaServita = masaServita;
+	}	
+	
 }
