@@ -10,6 +10,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 
+import calculator.BasePriceCalculator;
 import calculator.PriceCalculator;
 
 public class Factura {
@@ -70,7 +71,11 @@ public class Factura {
 				break;
 			}
 			case 2: {
-				cell = new PdfPCell(new Phrase(this.um + "\n\n\n\n" + masaUm, f));
+				if(priceCalculator instanceof BasePriceCalculator) {
+					cell = new PdfPCell(new Phrase(this.um + "\n\n" + masaUm, f));
+				} else {
+					cell = new PdfPCell(new Phrase(this.um + "\n\n\n\n" + masaUm, f));
+				}
 				break;
 			}
 			case 3: {
