@@ -4,6 +4,7 @@
 
 package model;
 
+import calculator.PriceCalculator;
 import converter.Converter;
 
 public class Chitanta
@@ -71,7 +72,7 @@ public class Chitanta
             txt = String.valueOf(txt) + "Suma de:  " + total * 100.0f / 100.0f + "              adica:  " + Converter.number2String((int)Math.floor(total)) + "lei\n";
         }
         else {
-            txt = String.valueOf(txt) + "Suma de:  " + String.format("%.2f", total) + "              adica:  " + Converter.number2String((int)Math.floor(total));
+            txt = String.valueOf(txt) + "Suma de:  " + String.format(PriceCalculator.FORMAT_MODE, total) + "              adica:  " + Converter.number2String((int)Math.floor(total));
             txt = String.valueOf(txt) + "leisi";
             txt = String.valueOf(txt) + Converter.number2String(Math.round(total * 100.0f % 100.0f)) + "bani\n";
         }

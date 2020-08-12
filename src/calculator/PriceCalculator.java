@@ -5,6 +5,7 @@ public abstract class PriceCalculator {
 	protected Float pretTotal;
 	protected Float tva;
 	protected Integer quantity;
+	public static final String FORMAT_MODE = "%.3f";
 	
 	public PriceCalculator(Float pretTotal, Float tva, Integer quantity) {
 		super();

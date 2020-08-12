@@ -130,12 +130,12 @@ public class Factura {
 		cell.setHorizontalAlignment(1);
 		cell.setVerticalAlignment(5);
 		table.addCell(cell);
-		cell = new PdfPCell(new Phrase(Float.parseFloat(priceCalculator.getTotalWithoutTVA().replace(",", ".")) + Float.parseFloat(masaServitaCalculator.getTotalWithoutTVA().replace(",", ".")) + "", f));
+		cell = new PdfPCell(new Phrase(String.format(PriceCalculator.FORMAT_MODE, Float.parseFloat(priceCalculator.getTotalWithoutTVA().replace(",", ".")) + Float.parseFloat(masaServitaCalculator.getTotalWithoutTVA().replace(",", "."))), f));
 		cell.setFixedHeight(40.0f);
 		cell.setHorizontalAlignment(1);
 		cell.setVerticalAlignment(5);
 		table.addCell(cell);
-		cell = new PdfPCell(new Phrase(Float.parseFloat(priceCalculator.getTVA().replace("-", "").replace(",", ".").trim()) + Float.parseFloat(masaServitaCalculator.getTVA().replace("-", "").replace(",", ".").trim()) + "", f));
+		cell = new PdfPCell(new Phrase(String.format(PriceCalculator.FORMAT_MODE, Float.parseFloat(priceCalculator.getTVA().replace("-", "").replace(",", ".").trim()) + Float.parseFloat(masaServitaCalculator.getTVA().replace("-", "").replace(",", ".").trim())), f));
 		cell.setHorizontalAlignment(1);
 		cell.setVerticalAlignment(5);
 		cell.setFixedHeight(40.0f);

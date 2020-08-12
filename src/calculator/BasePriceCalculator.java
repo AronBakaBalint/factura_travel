@@ -13,7 +13,7 @@ public class BasePriceCalculator extends PriceCalculator{
 			return "";
 		}
 		Float unitPrice = pretTotal / (1 + tva / 100) / quantity;
-		return String.format("%.2f", unitPrice);
+		return String.format(FORMAT_MODE, unitPrice);
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class BasePriceCalculator extends PriceCalculator{
 			return "0";
 		}
 		Float unitPrice = pretTotal/ (1 + tva / 100) /quantity;
-		return String.format("%.2f", unitPrice * quantity * tva / 100);
+		return String.format(FORMAT_MODE, unitPrice * quantity * tva / 100);
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class BasePriceCalculator extends PriceCalculator{
 			return "0";
 		}
 		Float unitPrice = pretTotal / (1 + tva / 100) / quantity;
-		return String.format("%.2f", unitPrice * quantity);
+		return String.format(FORMAT_MODE, unitPrice * quantity);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class BasePriceCalculator extends PriceCalculator{
 			return "0";
 		}
 		Float unitPrice = pretTotal / (1 + tva / 100) / quantity;
-		return String.format("%.2f", unitPrice * quantity);
+		return String.format(FORMAT_MODE, unitPrice * quantity);
 	}
 
 	@Override

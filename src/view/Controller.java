@@ -32,13 +32,13 @@ import service.impl.ChitantaManagementServiceImpl;
 import service.impl.FacturaManagementServiceImpl;
 
 public class Controller {
-	
+
 	private View view;
-	
+
 	private final ChitantaManagementService chitantaService = new ChitantaManagementServiceImpl();
-	
+
 	private final FacturaManagementService facturaService = new FacturaManagementServiceImpl();
-	
+
 	private final PriceCalculatorFactory priceCalculatorFactory = new PriceCalculatorFactory();
 
 	public Controller(final View v) {
@@ -73,7 +73,8 @@ public class Controller {
 				cumparatorP.setSpacingBefore(-150.0f);
 				document.add(cumparatorP);
 				f = new Font(Font.FontFamily.TIMES_ROMAN, 24.0f, 1, BaseColor.BLACK);
-				final Paragraph titleP = new Paragraph("                                                              FACTURA FISCALA");
+				final Paragraph titleP = new Paragraph(
+						"                                                              FACTURA FISCALA");
 				titleP.setSpacingBefore(-100.0f);
 				document.add(titleP);
 				final Seria seria = new Seria("UN  " + facturanr, view.getDataF().getText());
@@ -93,47 +94,53 @@ public class Controller {
 				final Paragraph p = new Paragraph("COTA T.V.A. :  " + tva + "%");
 				p.setSpacingBefore(110.0f);
 				document.add(p);
-				final Factura factura = new Factura(services, masaName, um, masaUm, priceCalculatorFactory.getPriceCalculator(view), new BasePriceCalculator(view.getMasaServitaTotal(), 5f, view.getMasaQuantity()));
+				final Factura factura = new Factura(services, masaName, um, masaUm,
+						priceCalculatorFactory.getPriceCalculator(view),
+						new BasePriceCalculator(view.getMasaServitaTotal(), 5f, view.getMasaQuantity()));
 				document.add(factura.getUpperTable());
 				document.add(factura.getLowerTable());
 				if (view.isChitantaSelected()) {
-					f = new Font(Font.FontFamily.TIMES_ROMAN, 8.0f, 0, BaseColor.BLACK);
-					final int chitantanr = chitantaService.getChitantaNr();
-					chitantaService.updateChitantaNr();
-					document.add(new Paragraph(
-							"______________________________________________________________________________"));
-					final Chitanta chitanta = new Chitanta(cumparator, view.getBaseTotal()+view.getMasaServitaTotal(), chitantanr,
-							facturanr, view.getDataF().getText());
-					final Paragraph p2 = new Paragraph(chitanta.getVanzator(), f);
-					p2.setSpacingAfter(20.0f);
-					p2.setSpacingBefore(5.0f);
-					document.add(p2);
-					final Paragraph p3 = new Paragraph(
-							"                                                                                   CHITANTA");
-					p3.setSpacingBefore(-80.0f);
-					document.add(p3);
-					final Paragraph p4 = new Paragraph(
-							"                                                                                                                                                                                             Nr.   "
-									+ chitantanr,
-							f);
-					p4.setSpacingAfter(10.0f);
-					p4.setSpacingBefore(-20.0f);
-					document.add(p4);
-					final Paragraph p5 = new Paragraph(
-							"                                                                                                    "
-									+ seriaData,
-							f);
-					p5.setSpacingAfter(50.0f);
-					document.add(p5);
-					final Paragraph p6 = new Paragraph(chitanta.getCumparator(), f);
-					document.add(p6);
-					document.add(new Paragraph(
-							"______________________________________________________________________________"));
+					createChitanta(cumparator, document, facturanr, seriaData);
 				}
 				document.close();
 			} catch (FileNotFoundException | DocumentException ex2) {
 				JOptionPane.showMessageDialog(view, "Close the open PDF before operating");
 			}
+		}
+
+		private void createChitanta(Cumparator cumparator, Document document, Integer facturanr, String seriaData) throws DocumentException {
+			Font f = new Font(Font.FontFamily.TIMES_ROMAN, 8.0f, 0, BaseColor.BLACK);
+			final int chitantanr = chitantaService.getChitantaNr();
+			chitantaService.updateChitantaNr();
+			document.add(
+					new Paragraph("______________________________________________________________________________"));
+			final Chitanta chitanta = new Chitanta(cumparator, view.getBaseTotal() + view.getMasaServitaTotal(),
+					chitantanr, facturanr, view.getDataF().getText());
+			final Paragraph p2 = new Paragraph(chitanta.getVanzator(), f);
+			p2.setSpacingAfter(20.0f);
+			p2.setSpacingBefore(5.0f);
+			document.add(p2);
+			final Paragraph p3 = new Paragraph(
+					"                                                                                   CHITANTA");
+			p3.setSpacingBefore(-80.0f);
+			document.add(p3);
+			final Paragraph p4 = new Paragraph(
+					"                                                                                                                                                                                             Nr.   "
+							+ chitantanr,
+					f);
+			p4.setSpacingAfter(10.0f);
+			p4.setSpacingBefore(-20.0f);
+			document.add(p4);
+			final Paragraph p5 = new Paragraph(
+					"                                                                                                    "
+							+ seriaData,
+					f);
+			p5.setSpacingAfter(50.0f);
+			document.add(p5);
+			final Paragraph p6 = new Paragraph(chitanta.getCumparator(), f);
+			document.add(p6);
+			document.add(
+					new Paragraph("______________________________________________________________________________"));
 		}
 	}
 
