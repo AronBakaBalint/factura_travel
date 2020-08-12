@@ -30,13 +30,12 @@ public class BasePriceCalculator extends PriceCalculator{
 		if(quantity == 0) {
 			return "0";
 		}
-		Float unitPrice = pretTotal / (1 + tva / 100) / quantity;
-		return String.format(FORMAT_MODE, unitPrice * quantity);
+		return String.format(FORMAT_MODE, pretTotal / (1 + tva / 100));
 	}
 
 	@Override
 	public String getNumeProduse() {
-		return "";
+		return "\n";
 	}
 
 	@Override

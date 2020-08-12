@@ -96,7 +96,7 @@ public class Controller {
 				document.add(p);
 				final Factura factura = new Factura(services, masaName, um, masaUm,
 						priceCalculatorFactory.getPriceCalculator(view),
-						new BasePriceCalculator(view.getMasaServitaTotal(), 5f, view.getMasaQuantity()));
+						new BasePriceCalculator(view.getMasaServitaTotal(), 5.0f, view.getMasaQuantity()));
 				document.add(factura.getUpperTable());
 				document.add(factura.getLowerTable());
 				if (view.isChitantaSelected()) {

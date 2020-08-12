@@ -82,11 +82,22 @@ public class Factura {
 				break;
 			}
 			case 5: {
-				cell = new PdfPCell(new Phrase(priceCalculator.getPriceWithoutTVA() + "\n\n" + masaServitaCalculator.getPriceWithoutTVA().replaceAll("0", ""), f));
+				String masaServitaPrice = masaServitaCalculator.getPriceWithoutTVA();
+				if(masaServitaPrice.equals("0")) {
+					cell = new PdfPCell(new Phrase(priceCalculator.getPriceWithoutTVA() + "\n\n", f));
+				} else {
+					cell = new PdfPCell(new Phrase(priceCalculator.getPriceWithoutTVA() + "\n\n" + masaServitaPrice, f));
+				}
 				break;
 			}
 			case 6: {
-				cell = new PdfPCell(new Phrase(priceCalculator.getTVA() + "\n\n" + masaServitaCalculator.getTVA().replaceAll("0", ""), f));
+				String masaServitaTVA = masaServitaCalculator.getTVA();
+				if(masaServitaTVA.equals("0")) {
+					cell = new PdfPCell(new Phrase(priceCalculator.getTVA() + "\n\n", f));
+				} else {
+					cell = new PdfPCell(new Phrase(priceCalculator.getTVA() + "\n\n" + masaServitaTVA, f));
+				}
+				
 				break;
 			}
 			}
