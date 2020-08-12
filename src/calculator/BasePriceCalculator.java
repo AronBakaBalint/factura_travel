@@ -19,7 +19,7 @@ public class BasePriceCalculator extends PriceCalculator{
 	@Override
 	public String getTVA() {
 		if(quantity == 0) {
-			return "";
+			return "0";
 		}
 		Float unitPrice = pretTotal/ (1 + tva / 100) /quantity;
 		return String.format("%.2f", unitPrice * quantity * tva / 100);
@@ -28,7 +28,7 @@ public class BasePriceCalculator extends PriceCalculator{
 	@Override
 	public String getPriceWithoutTVA() {
 		if(quantity == 0) {
-			return "";
+			return "0";
 		}
 		Float unitPrice = pretTotal / (1 + tva / 100) / quantity;
 		return String.format("%.2f", unitPrice * quantity);
@@ -42,7 +42,7 @@ public class BasePriceCalculator extends PriceCalculator{
 	@Override
 	public String getTotalWithoutTVA() {
 		if(quantity == 0) {
-			return "";
+			return "0";
 		}
 		Float unitPrice = pretTotal / (1 + tva / 100) / quantity;
 		return String.format("%.2f", unitPrice * quantity);
